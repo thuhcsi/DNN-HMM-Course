@@ -14,7 +14,7 @@ class HMM:
         ob_category (list, with length 2): observation categories
         total_states (int): number of states, default=3
         pi (array, with shape (3,)): initial state probability
-        A (array, with shape (3, 3)): transition probability.
+        A (array, with shape (3, 3)): transition probability. A.sum(axis=1) must be all ones.
                                       A[i, j] means transition prob from state i to state j.
                                       A.T[i, j] means transition prob from state j to state i.
         B (array, with shape (3, 2)): emitting probability, B.sum(axis=1) must be all ones.
