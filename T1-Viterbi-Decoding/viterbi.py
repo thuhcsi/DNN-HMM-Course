@@ -102,7 +102,6 @@ class HMM:
             best_prob: the probability of the best state sequence
             best_path: the best state sequence
 
-
         """
         T = ob.shape[0]
         delta = np.zeros((T, self.total_states))
