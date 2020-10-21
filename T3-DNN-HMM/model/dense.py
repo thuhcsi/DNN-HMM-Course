@@ -7,7 +7,7 @@ import torch.nn as nn
 
 class DenseModel(nn.Module):
 
-    def __init__(self, in_dim, out_dim, hidden=512):
+    def __init__(self, in_dim, out_dim, hidden=256):
         super().__init__()
         self.dense_layers = nn.Sequential(
             nn.Linear(in_dim, hidden), nn.LayerNorm(hidden), nn.ReLU(True), nn.Dropout(p=0.1),

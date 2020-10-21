@@ -4,17 +4,25 @@
 You must finish [Task-2](https://github.com/thuhcsi/DNN-HMM-Course/tree/main/T2-GMM-HMM) first to get a well-trained GMM-HMM model, which we will use for generating frame-level alignments.
 
 If you have done Task-2, start your docker container built by Task-2 and navigate to timit folder:
+- start docker container on linux(ubuntu)
 ```sh
 # *** In host shell***
+# find your container id
+sudo docker ps -l
+# start and enter your container
 sudo docker start your_container_id
 sudo docker attach your_container_id
 # *** In docker shell***
-cd /opt/kaldi/egs/timit/s5
-. ./path.sh
+# now you have entered your container
 ```
+- start docker container on windows10
+- start docker container on macos
+
 Then you can check and view your GMM-HMM model by the following command:
 ```sh
 # *** In docker shell***
+cd /opt/kaldi/egs/timit/s5
+. ./path.sh
 # wirte model information to model.txt
 gmm-copy --binary=false /opt/kaldi/egs/timit/s5/exp/tri3/final.mdl model.txt
 ```
@@ -22,16 +30,31 @@ Explanations of each part in `model.txt` can be found [here]()
 
 Besides, you can also visualize your decoding graph (WFST) / MFCC features ...  :
 ```sh
+# *** In docker shell***
+cd /opt/kaldi/egs/timit/s5
+. ./path.sh
 # write graph information to HCLG.txt
 fstprint /opt/kaldi/egs/timit/s5/exp/tri3/graph/HCLG.fst HCLG.txt
 # write mfcc features to raw_mfcc_test.1.txt
 copy-feats ark:/opt/kaldi/egs/timit/s5/mfcc/raw_mfcc_test.1.ark ark,t:raw_mfcc_test.1.txt
 ```
 
+Next, clone this repo to your docker container
+```sh
+# *** In docker shell***
+# we will clone this repo to directory /opt/kaldi/egs/timit/s5
+cd /opt/kaldi/egs/timit/s5
+git clone https://github.com/thuhcsi/DNN-HMM-Course.git
+cd DNN-HMM-Course
+# install required packages
+pip3 install -r requirements.txt
+```
+
 ## Step-1
 Run the DNN training:
 ```sh
 # *** In docker shell***
+cd /opt/kaldi/egs/timit/s5/DNN-HMM-Course/T3-DNN-HMM
 ./run.sh --stage 0
 ```
 This script starts a full ASR experiment and performs data preparation, training, evaluation, forward, and decoding steps. A progress bar shows the evolution of all the aforementioned phases.
@@ -57,23 +80,24 @@ Dimention of transformed MFCC feature is xxx
                         DNN Training & Decoding
 ============================================================================
 ......
-10/18/2020 13:57:59-***** Running DNN *****
-10/18/2020 13:57:59-  total parameters: x.xxxxx M
-10/18/2020 13:58:02-Train Epoch 0 | Step 1 | Loss 7.640 | Acc 0.08%
-10/18/2020 13:58:05-Train Epoch 0 | Step 2 | Loss 7.308 | Acc 5.58%
-10/18/2020 13:58:07-Train Epoch 0 | Step 3 | Loss 7.002 | Acc 7.41%
-10/18/2020 13:58:10-Train Epoch 0 | Step 4 | Loss 6.820 | Acc 6.92%
-10/18/2020 13:58:12-Train Epoch 0 | Step 5 | Loss 6.741 | Acc 5.55%
+10/21/2020 03:49:41-***** Running DNN *****
+10/21/2020 03:49:41-  total parameters: 0.564328 M
+10/21/2020 03:49:43-Train Epoch 0 | Step 1 | Loss 7.683 | Acc 0.04%
+10/21/2020 03:49:43-Train Epoch 0 | Step 2 | Loss 7.552 | Acc 0.08%
+10/21/2020 03:49:44-Train Epoch 0 | Step 3 | Loss 7.436 | Acc 1.62%
+10/21/2020 03:49:44-Train Epoch 0 | Step 4 | Loss 7.326 | Acc 4.82%
+10/21/2020 03:49:45-Train Epoch 0 | Step 5 | Loss 7.215 | Acc 5.59%
 ......
-10/18/2020 13:15:49-Train Epoch 29 | Step 866 | Loss 2.352 | Acc 39.13%
-10/18/2020 13:15:53-Train Epoch 29 | Step 867 | Loss 2.330 | Acc 39.20%
-10/18/2020 13:15:56-Train Epoch 29 | Step 868 | Loss 2.315 | Acc 39.73%
-10/18/2020 13:15:59-Train Epoch 29 | Step 869 | Loss 2.299 | Acc 40.08%
-10/18/2020 13:16:01-Train Epoch 29 | Step 870 | Loss 2.232 | Acc 41.48%
-10/18/2020 13:16:01-Evaluation DEV
-10/18/2020 13:18:51-Epoch 29 DEV Loss 2.626 Acc 34.95% WER 23.9 | 400 15057 | 78.9 15.1 6.0 2.8 23.9 99.5 | -0.005 |
-10/18/2020 13:18:51-Evaluation TEST
-10/18/2020 13:20:16-Epoch 29 TEST Loss 2.654 Acc 34.19% WER 24.8 | 192 7215 | 78.0 15.3 6.7 2.8 24.8 99.5 | -0.032 |
+10/21/2020 04:07:08-Train Epoch 29 | Step 1736 | Loss 2.555 | Acc 36.06%
+10/21/2020 04:07:08-Train Epoch 29 | Step 1737 | Loss 2.388 | Acc 38.48%
+10/21/2020 04:07:09-Train Epoch 29 | Step 1738 | Loss 2.508 | Acc 35.64%
+10/21/2020 04:07:10-Train Epoch 29 | Step 1739 | Loss 2.445 | Acc 37.68%
+10/21/2020 04:07:10-Train Epoch 29 | Step 1740 | Loss 2.274 | Acc 40.48%
+10/21/2020 04:07:10-Evaluation DEV
+10/21/2020 04:10:50-Epoch 29 DEV Loss 2.694 Acc 33.90% WER 25.1 | 400 15057 | 78.6 16.0 5.4 3.7 25.1 99.8 | -0.129 | /opt/kaldi/egs/timit/s5/DNN-HMM-Course/T3-DNN-HMM/exp/DenseModel/decode_dev/score_5/ctm_39phn.filt.sys
+10/21/2020 04:10:50-Evaluation TEST
+10/21/2020 04:12:36-Epoch 29 TEST Loss 2.711 Acc 33.37% WER 26.0 | 192 7215 | 77.6 16.5 5.9 3.6 26.0 100.0 | -0.104 | /opt/kaldi/egs/timit/s5/DNN-HMM-Course/T3-DNN-HMM/exp/DenseModel/decode_test/score_5/ctm_39phn.filt.sys
+10/21/2020 04:12:36-***** Done DNN Training *****
 ```
 
 The script `run.sh` progressively creates the following files in the output directory `$PWD/exp`:
@@ -86,16 +110,21 @@ The script `run.sh` progressively creates the following files in the output dire
 
 and the script `train.py` will save the trained model and write log to `$PWD/exp/$MODEL`.
 
-The achieved WER(%) is 23.9%. The model we used is `DenseModel` in `model/dense.py`. This model is actually a toy model thus the performance is not really good. However, we will use it as our baseline since it is suitable to train on Desktop CPUs (i.e., time overhead is about 35min on Intel i5-8400).
+The achieved WER(%) is 25.1%(dev)/26.0%(test). The model we used is `DenseModel` in `model/dense.py`. This model is actually a toy model thus the performance is not really good. However, we will use it as our baseline since it is suitable to train on Desktop CPUs (i.e., time overhead is about 30min on Intel i5-8400).
 
 **By correctly running the baseline scripts, you can get the basic score for this task.**
 
 
 ## Step-2
 There are many ways to improve results, students who get better(lower) WERs will get extra points:
-* Customize your own model in `model/mymodel.py` to get better WER, i.e., deeper model / CNN model / RNN model / Attention Model.
+* Customize your own model in `model/mymodel.py` to get better WER, i.e., deeper model / CNN model / RNN model / Attention Mode.
 * Tricks for training neural networks, i.e., label smoothing / data augmentation. You need to implement those tricks by yourself if you want to use them.
-* Try different parameters in `run.sh`, i.e., leftcontext=3 && rightcontext=3, this will provide useful information for frame classification. You can also increase those values to see if the result decreases and explain why.
+* Try different parameters in `run.sh`, i.e., try longer epochs or set leftcontext=3 && rightcontext=3, this will provide useful information for frame classification. You can also increase those values to see if the result decreases and explain why.
 * Try to extract different features, i.e., MFCC / FBANK / FMLLR / I-VECTOR. Generally speaking, the more features that are fused, the better results you can get.
 
 NOTE: for feature extraction, we will show some examples here (WIP)
+
+## Step-3
+Answer questions
+- Q1:
+- Q2:
