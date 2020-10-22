@@ -6,7 +6,7 @@ set -e
 ## Begin configuration section
 stage=0                 # start from 0 if you need to start from data preparation
 stop_stage=100          # stop stage
-kaldi_root=/opt/kaldi   # kaldi installation directory
+kaldi_root=`realpath ../../../../../`   # kaldi installation directory
 epochs=30               # total training epochs
 lr="1e-3"               # learning rate
 batch_size=64          # batch size
@@ -22,7 +22,7 @@ feature_dim=            # feature dimention, automatically set by this script
 # check kaldi
 if [ -d "$kaldi_root/egs/timit/s5/exp/tri3" ]; then
   export KALDI_ROOT=$kaldi_root
-  [ -f $KALDI_ROOT/tools/env.sh ] && . $KALDI_ROOT/tools/env.sh
+  [ -f $KALDI_ROOT/egs/timit/s5/env.sh ] && . $KALDI_ROOT/egs/timit/s5/env.sh
   # add soft link
   ln -sf $kaldi_root/egs/timit/s5/utils utils
   ln -sf $kaldi_root/egs/timit/s5/steps steps

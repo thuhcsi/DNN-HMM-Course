@@ -15,7 +15,6 @@ cmd=utils/run.pl
 acwt=0.2
 num_threads=1
 kaldi_root=/opt/kaldi
-scoring_script=$kaldi_root/egs/timit/s5/local/score.sh
 scoring_opts="--min-lmwt 1 --max-lmwt 10"
 beam=13.0
 latbeam=8.0
@@ -53,7 +52,7 @@ fi
 # check kaldi
 if [ -d "$kaldi_root" ]; then
   export KALDI_ROOT=$kaldi_root
-  [ -f $KALDI_ROOT/tools/env.sh ] && . $KALDI_ROOT/tools/env.sh
+  [ -f $KALDI_ROOT/egs/timit/s5/env.sh ] && . $KALDI_ROOT/egs/timit/s5/env.sh
   # add soft link
   ln -sf $kaldi_root/egs/timit/s5/utils utils
   ln -sf $kaldi_root/egs/timit/s5/steps steps
@@ -92,6 +91,7 @@ wait
 cp $gmmhmm $decode_dir/../
 
 # Begin scoring
+scoring_script=$kaldi_root/egs/timit/s5/local/score.sh
 [ ! -x $scoring_script ] && \
   echo "$0: not scoring because local/score.sh does not exist or not executable." && exit 1;
 $scoring_script $scoring_opts $data_dir $graph_dir $decode_dir
