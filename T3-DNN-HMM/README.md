@@ -3,59 +3,47 @@
 ## Preliminary
 You must finish [Task-2](https://github.com/thuhcsi/DNN-HMM-Course/tree/main/T2-GMM-HMM) first to get a well-trained GMM-HMM model, which we will use for generating frame-level alignments.
 
-If you have done Task-2, start your docker container built by Task-2 and navigate to timit folder:
-- start docker container on linux(ubuntu)
+If you have done Task-2, you can check and view your GMM-HMM model by the following command:
 ```sh
-# *** In host shell***
-# find your container id
-sudo docker ps -l
-# start and enter your container
-sudo docker start your_container_id
-sudo docker attach your_container_id
-# *** In docker shell***
-# now you have entered your container
-```
-- start docker container on windows10
-- start docker container on macos
-
-Then you can check and view your GMM-HMM model by the following command:
-```sh
-# *** In docker shell***
-cd /opt/kaldi/egs/timit/s5
+# *** In terminal shell(macos/linux) or ubuntu 20.04 shell(windows10) ***
+# navigate to timit folder
+cd ~/kaldi/egs/timit/s5
 . ./path.sh
 # wirte model information to model.txt
-gmm-copy --binary=false /opt/kaldi/egs/timit/s5/exp/tri3/final.mdl model.txt
+gmm-copy --binary=false exp/tri3/final.mdl model.txt
 ```
 Explanations of each part in `model.txt` can be found [here]()
 
 Besides, you can also visualize your decoding graph (WFST) / MFCC features ...  :
 ```sh
-# *** In docker shell***
-cd /opt/kaldi/egs/timit/s5
+# *** In terminal shell(macos/linux) or ubuntu 20.04 shell(windows10) ***
+cd ~/kaldi/egs/timit/s5
 . ./path.sh
 # write graph information to HCLG.txt
-fstprint /opt/kaldi/egs/timit/s5/exp/tri3/graph/HCLG.fst HCLG.txt
+fstprint exp/tri3/graph/HCLG.fst HCLG.txt
 # write mfcc features to raw_mfcc_test.1.txt
-copy-feats ark:/opt/kaldi/egs/timit/s5/mfcc/raw_mfcc_test.1.ark ark,t:raw_mfcc_test.1.txt
+copy-feats ark:mfcc/raw_mfcc_test.1.ark ark,t:raw_mfcc_test.1.txt
 ```
 
-Next, clone this repo to your docker container
+Next, clone this repo and install required packages:
 ```sh
-# *** In docker shell***
-# we will clone this repo to directory /opt/kaldi/egs/timit/s5
-cd /opt/kaldi/egs/timit/s5
+# *** In terminal shell(macos/linux) or ubuntu 20.04 shell(windows10) ***
+# we will clone this repo to directory ~/kaldi/egs/timit/s5
+# NOTE: if you encounter `temporary failure resolving xxx` while installing pkgs
+#       follow [this link](https://gist.github.com/coltenkrauter/608cfe02319ce60facd76373249b8ca6) to fix wsl2 dns problem
+cd ~/kaldi/egs/timit/s5
 git clone https://github.com/thuhcsi/DNN-HMM-Course.git
 cd DNN-HMM-Course
 # install required packages
-pip3 install -r requirements.txt
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 ```
 
 ## Step-1
 Run the DNN training:
 ```sh
-# *** In docker shell***
-cd /opt/kaldi/egs/timit/s5/DNN-HMM-Course/T3-DNN-HMM
-./run.sh --stage 0
+# *** In terminal shell(macos/linux) or ubuntu 20.04 shell(windows10) ***
+cd ~/kaldi/egs/timit/s5/DNN-HMM-Course/T3-DNN-HMM
+./run.sh --stage 0 --kaldi-root ~/kaldi
 ```
 This script starts a full ASR experiment and performs data preparation, training, evaluation, forward, and decoding steps. A progress bar shows the evolution of all the aforementioned phases.
 
