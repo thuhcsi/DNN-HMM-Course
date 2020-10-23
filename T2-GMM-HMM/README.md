@@ -2,36 +2,56 @@
 
 ## Preliminary
 
+
+
 - windows10
-  - [Install WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10), note that in step-6 you must install ubuntu 20.04 LTS
-  - [**OPTIONAL**] WSL2 is installed on the system disk by default. If the remaining space of your system disk is less than 5G, you can move wsl to other disks. To do this, first download [LxRunOffline](https://github.com/DDoSolitary/LxRunOffline/releases/download/v3.5.0/LxRunOffline-v3.5.0-msvc.zip), copy `LxRunOffline.exe` and `LxRunOfflineShellExt.dll` to `C:\Windows\System32`, then open **PowerShell** and run the following commands
+  - [Install WSL and Ubuntu 20.04](https://docs.microsoft.com/en-us/windows/wsl/install-win10), note that in step-6 you must select ubuntu 20.04 LTS (16.04 and 18.04 are not supported right now)
+
+	<details>
+	<summary>OPTIONAL</summary>
+
+	WSL is installed on the system disk by default. If the remaining space of your system disk is less than 5G, you can move wsl to other disks. To do this, first download [LxRunOffline](https://github.com/DDoSolitary/LxRunOffline/releases/download/v3.5.0/LxRunOffline-v3.5.0-msvc.zip), copy `LxRunOffline.exe` and `LxRunOfflineShellExt.dll` to `C:\Windows\System32`, then open **PowerShell** and run the following commands:
+	
+	first shut down your wsl:
 	```sh
-	# ****** in powershell ******
-	# stop wsl
 	wsl --shutdown
-	# list names of all installed wsl
+	```
+	then check names of installed wsl, in our case, the default name should be `Ubuntu-20.04`:
+	```sh
 	LxRunOffline list
-	# move wsl(Ubuntu-20.04) to D:\Linux\Ubuntu-20.04
+	```
+	move wsl(Ubuntu-20.04) to D:\Linux\Ubuntu-20.04:
+	```sh
 	LxRunOffline m -n Ubuntu-20.04 -d D:\Linux\Ubuntu-20.04
 	```
+	</details>
+
   - Start **ubuntu 20.04** and run the following commands
+
 	```sh
-	# ****** in ubuntu 20.04 shell ******
-	# NOTE: if you encounter `temporary failure resolving xxx` while installing pkgs
-	#       follow [this link](https://gist.github.com/coltenkrauter/608cfe02319ce60facd76373249b8ca6) to fix wsl2 dns problem
-	#       if apt-get is too slow
-	#       follow [this link](https://blog.csdn.net/xiangxianghehe/article/details/105688062) to change apt sources
-	sudo add-apt-repository ppa:jonathonf/gcc-7.1
-	sudo apt-get install gfortran-7
+	sudo apt-get install gfortran
 	sudo apt-get install python3-pip
 	wget 219.223.184.252/file/ubuntu20.04.kaldi.tar.gz
-	tar -xzf ubuntu20.04.kaldi.tar.gz
+	tar xzf ubuntu20.04.kaldi.tar.gz
+	wget 219.223.184.252/file/torch-1.6.0-cp38-cp38-manylinux1_x86_64.whl
+	pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple torch-1.6.0-cp38-cp38-manylinux1_x86_64.whl
 	```
+
+	<details>
+	<summary>OPTIONAL</summary>
+
+	if you encounter `temporary failure resolving xxx` while installing pkgs,
+	follow [this link](https://gist.github.com/coltenkrauter/608cfe02319ce60facd76373249b8ca6) to fix wsl2 dns problem.
+	if apt-get is too slow,
+	follow [this link](https://blog.csdn.net/xiangxianghehe/article/details/105688062) to change apt sources
+	
+	</details>
+
+
 
 - macos
   - start terminal and run the following commands
 	```sh
-	# ****** in terminal shell ******
 	WIP
 	```
 
@@ -39,26 +59,50 @@
 - linux(ubuntu 20.04)
   - start terminal and run the following commands
 	```sh
-	# ****** in terminal shell ******
-	sudo add-apt-repository ppa:jonathonf/gcc-7.1
-	sudo apt-get install gfortran-7
+	sudo apt-get install gfortran
 	sudo apt-get install python3-pip
 	wget 219.223.184.252/file/ubuntu20.04.kaldi.tar.gz
-	tar -xzf ubuntu20.04.kaldi.tar.gz
+	tar xzf ubuntu20.04.kaldi.tar.gz
+	wget 219.223.184.252/file/torch-1.6.0-cp38-cp38-manylinux1_x86_64.whl
+	pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple torch-1.6.0-cp38-cp38-manylinux1_x86_64.whl
 	```
 
-## Step-1
-Run the GMM-HMM training.
+## GMM-HMM Training
+
+First navigate to timit folder
+```sh
+cd ~/kaldi/egs/timit/s5
+```
+
+In this folder, you can see `TIMIT` dataset with a directory structure like this:
 
 ```sh
-# ****** in terminal shell(macos/linux) or ubuntu 20.04 shell(windows10)******
-# navigate to timit folder
-cd ~/kaldi/egs/timit/s5
-# run the script
-./run.sh
+TIMIT
+├── DOC
+├── README.DOC
+├── TEST
+└── TRAIN
 ```
-This script starts a full GMM-HMM experiment and performs data preparation, training, evaluation, forward, and decoding steps. A progress bar shows the evolution of all the aforementioned phases.
+
+You can also see `run.sh` in this folder, this script starts a full GMM-HMM experiment and performs data preparation, training, evaluation, forward, and decoding steps. A progress bar shows the evolution of all the aforementioned phases.
+
+Here we will run this script stage by stage.
+
+---
+---
+
+Run stage-0: format data and prepare lexicon:
 ```sh
+./run.sh --stage 0 --stop-stage 0
+```
+Answer questions:
+- Q1: Whats the difference between MFCC and MEL-Spectrogram, explain why.
+- Q2:
+
+<details>
+<summary>PROGRESS BAR</summary>
+
+```
 ============================================================================
                 Data & Lexicon & Language Preparation
 ============================================================================
@@ -70,6 +114,25 @@ Dictionary & language model preparation succeeded
 Checking xxx
 ......
 Succeeded in formatting data.
+```
+</details>
+
+---
+---
+
+Run stage-1: extract MFCC and Cepstral Mean and Variance Normalization (CMVN):
+```sh
+./run.sh --stage 1 --stop-stage 1
+```
+
+Answer questions:
+- Q1: Whats the difference between MFCC and MEL-Spectrogram, explain why.
+- Q2:
+
+<details>
+<summary>PROGRESS BAR</summary>
+
+```sh
 ============================================================================
          MFCC Feature Extration & CMVN for Training and Test set
 ============================================================================
@@ -80,6 +143,26 @@ steps/compute_cmvn_stats.sh data/train exp/make_mfcc/train mfcc
 ......
 Succeeded creating CMVN stats for train.
 ......
+```
+</details>
+
+---
+---
+
+Run stage-2: train MonoPhone system:
+```sh
+./run.sh --stage 2 --stop-stage 2
+```
+
+
+Answer questions:
+- Q1: Whats the difference between MFCC and MEL-Spectrogram, explain why.
+- Q2:
+
+<details>
+<summary>PROGRESS BAR</summary>
+
+```sh
 ============================================================================
                      MonoPhone Training & Decoding
 ============================================================================
@@ -99,6 +182,26 @@ steps/decode.sh --nj 5 --cmd run.pl --mem 4G exp/mono/graph data/dev exp/mono/de
 ......
 steps/decode.sh --nj 5 --cmd run.pl --mem 4G exp/mono/graph data/test exp/mono/decode_test
 ......
+```
+</details>
+
+---
+---
+
+Run stage-3: train TriPhone system:
+```sh
+./run.sh --stage 3 --stop-stage 3
+```
+
+
+Answer questions:
+- Q1: Whats the difference between MFCC and MEL-Spectrogram, explain why.
+- Q2:
+
+<details>
+<summary>PROGRESS BAR</summary>
+
+```sh
 ============================================================================
            tri1 : Deltas + Delta-Deltas Training & Decoding
 ============================================================================
@@ -116,6 +219,23 @@ steps/decode.sh --nj 5 --cmd run.pl --mem 4G exp/tri1/graph data/dev exp/tri1/de
 ......
 steps/decode.sh --nj 5 --cmd run.pl --mem 4G exp/tri1/graph data/test exp/tri1/decode_test
 ......
+```
+</details>
+
+---
+---
+
+Run stage-4/5/6: adapt TriPhone system with [LDA](https://www.cnblogs.com/pinard/p/6244265.html), [MLLT](http://kaldi-asr.org/doc/transform.html#transform_mllt), [SAT](http://jcip.cipsc.org.cn/CN/Y2004/V18/I3/62) and [FMLLR](https://blog.csdn.net/xmdxcsj/article/details/78512645), show final results:
+```sh
+./run.sh --stage 4 --stop-stage 6
+```
+
+NOTE: [LDA](https://www.cnblogs.com/pinard/p/6244265.html), [MLLT](http://kaldi-asr.org/doc/transform.html#transform_mllt), [SAT](http://jcip.cipsc.org.cn/CN/Y2004/V18/I3/62) and [FMLLR](https://blog.csdn.net/xmdxcsj/article/details/78512645) are adaptation techniques for better training TriPhone system, they are not the focus of this experiment and the training pipeline is very similiar to stage-3 thus you don't neet to dig into stage-4/5/6. We keep these stages mainly to help [TASK-3](https://github.com/thuhcsi/DNN-HMM-Course/tree/main/T3-DNN-HMM) get better alignments. As for students who are interested in [LDA](https://www.cnblogs.com/pinard/p/6244265.html), [MLLT](http://kaldi-asr.org/doc/transform.html#transform_mllt), [SAT](http://jcip.cipsc.org.cn/CN/Y2004/V18/I3/62) and [FMLLR](https://blog.csdn.net/xmdxcsj/article/details/78512645), you can refer to the link for more explanations.
+
+<details>
+<summary>PROGRESS BAR</summary>
+
+```sh
 ============================================================================
                  tri2 : LDA + MLLT Training & Decoding
 ============================================================================
@@ -187,8 +307,4 @@ For Dnn training, we will use pytorch instead of kaldi.
 Finished successfully on Wed Oct 21 03:06:29 UTC 2020
 ============================================================================
 ```
-
-## Step-2
-Answer questions:
-- Q1:
-- Q2:
+</details>
