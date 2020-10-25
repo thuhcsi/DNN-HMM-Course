@@ -69,6 +69,8 @@
 
 ## GMM-HMM Training
 
+NOTE: by correctly running the baseline script, you can get basic score (10 points) of this task.
+
 First start a terminal and navigate to timit folder
 ```sh
 cd ~/kaldi/egs/timit/s5
@@ -96,9 +98,9 @@ Run stage-0: format data and prepare lexicon:
 ./run.sh --stage 0 --stop-stage 0
 ```
 Answer questions:
-- Q1: Look at the directory `data/train`, describe what is contained in files `text`, `wav.scp` and `utt2spk` respectively (Hint: all those files can be seen as key-value dicts). Here are some docs you can refer to : [link](http://kaldi-asr.org/doc/data_prep.html#data_prep_data)
-- Q2: Look at the file `data/lang/topo`, which contains two kinds of HMM topology, draw them using circles and arrows like [this](http://img.jeepxie.net/upload/c/42/c429ab922d03742c061f94d27c4b1915.png). You may notice that the HMM topology of a special phoneme is different from other phonemes. Use `data/lang/phones.txt` to map and find the name of the special phoneme. Here are some docs you can refer to: [link](http://kaldi-asr.org/doc/data_prep.html#data_prep_lang_contents), [link](http://kaldi-asr.org/doc/hmm.html)
-- Q3: You can change `num-sil-states` and `num-nonsil-states` for command `utils/prepare_lang.sh` in `run.sh`, then run this stage again and draw new topologies from `data/lang/topo`. (Note that set them to default values(sil=3 and nonsil=3) and rerun this stage before proceeding to the next stage since other values may affect the performance)
+- Q1 (3 points): Look at the directory `data/train`, describe what is contained in files `text`, `wav.scp` and `utt2spk` respectively (Hint: all those files can be seen as key-value dicts). Here are some docs you can refer to : [link](http://kaldi-asr.org/doc/data_prep.html#data_prep_data)
+- Q2 (3 points): Look at the file `data/lang/topo`, which contains two kinds of HMM topology, draw them using circles and arrows like [this](http://img.jeepxie.net/upload/c/42/c429ab922d03742c061f94d27c4b1915.png). You may notice that the HMM topology of a special phoneme is different from other phonemes. Use `data/lang/phones.txt` to map and find the name of the special phoneme. Here are some docs you can refer to: [link](http://kaldi-asr.org/doc/data_prep.html#data_prep_lang_contents), [link](http://kaldi-asr.org/doc/hmm.html)
+- Q3 (2 points): You can change `num-sil-states` and `num-nonsil-states` for command `utils/prepare_lang.sh` in `run.sh`, then run this stage again and draw new topologies from `data/lang/topo`. (Note that set them to default values(sil=3 and nonsil=3) and rerun this stage before proceeding to the next stage since other values may affect the performance)
 
 <details>
 <summary>PROGRESS BAR</summary>
@@ -127,15 +129,15 @@ Run stage-1: extract MFCC and Cepstral Mean and Variance Normalization (CMVN):
 ```
 
 Answer questions:
-- Q4: Describe the process of calculating MFCC, docs: [link](http://kaldi-asr.org/doc/feat.html#feat_mfcc)
-- Q5: Run following commands (Note: `ark` means archive file with binary format, `ark,t` means archive file with utf-8 text format), check file `raw_mfcc_test.1.txt` and answer the dimention of MFCC features. (Hint: count the number of columns)
+- Q4 (7 points): Describe the process of calculating MFCC, docs: [link](http://kaldi-asr.org/doc/feat.html#feat_mfcc)
+- Q5 (1 point): Run following commands (Note: `ark` means archive file with binary format, `ark,t` means archive file with utf-8 text format), check file `raw_mfcc_test.1.txt` and answer the dimention of MFCC features. (Hint: count the number of columns)
 	```sh
 	source ./path.sh
 	copy-feats ark:mfcc/raw_mfcc_test.1.ark ark,t:raw_mfcc_test.1.txt
 	```
-- Q6: Whats the difference between MFCC and MEL-Spectrogram, explain why.
-- Q7: Look at the directory `data/train`, describe what is contained in file `feats.scp`, docs: [link](http://kaldi-asr.org/doc/io.html#io_sec_scp)
-- Q8: Describe the role of script `utils/split_scp.pl` in `steps/make_mfcc.sh:line133`. (Hint: type `wc mfcc/raw_mfcc_train.1.scp` and `wc data/train/feats.scp`, check the value of `feats_nj` in `run.sh` and compare the outputs of the above commands)
+- Q6 (3 points): Whats the difference between MFCC and MEL-Spectrogram, explain why.
+- Q7 (1 point): Look at the directory `data/train`, describe what is contained in file `feats.scp`, docs: [link](http://kaldi-asr.org/doc/io.html#io_sec_scp)
+- Q8 (1 point): Describe the role of script `utils/split_scp.pl` in `steps/make_mfcc.sh:line133`. (Hint: type `wc mfcc/raw_mfcc_train.1.scp` and `wc data/train/feats.scp`, check the value of `feats_nj` in `run.sh` and compare the outputs of the above commands)
 
 <details>
 <summary>PROGRESS BAR</summary>
@@ -164,13 +166,13 @@ Run stage-2: train MonoPhone system:
 
 
 Answer questions:
-- Q9: How many MonoPhones do we use ? (Hint: check `exp/mono/phones.txt`, the MonoPhones we mean here do not contain eps, #0 and #1)
-- Q10: If we choose 3-state HMM to model all those MonoPhones, how many states will we have ? (Hint: run the following commands and count the number of Triples in `final.mono.mdl.txt`)
+- Q9 (1 point): How many MonoPhones do we use ? (Hint: check `exp/mono/phones.txt`, the MonoPhones we mean here do not contain eps, #0 and #1)
+- Q10 (1 point): If we choose 3-state HMM to model all those MonoPhones, how many states will we have ? (Hint: run the following commands and count the number of Triples in `final.mono.mdl.txt`)
 	```sh
 	source ./path.sh
 	gmm-copy --binary=false exp/mono/final.mdl final.mono.mdl.txt
 	```
-- Q11: Explain the meaning of each item in the above triple (i, j, k). docs: [link](https://kaldi-asr.org/doc/hmm.html#transition_model_identifiers)
+- Q11 (3 points): Explain the meaning of each item in the above triple (i, j, k). docs: [link](https://kaldi-asr.org/doc/hmm.html#transition_model_identifiers)
 
 <details>
 <summary>PROGRESS BAR</summary>
@@ -208,8 +210,8 @@ Run stage-3: train TriPhone system:
 
 
 Answer questions:
-- Q12: According to the number of MonoPhones in the previous question, how many candidates are there for TriPhones and TriPhones' HMM states (suppose each HMM has 3 states) ?
-- Q13: Refer to Q10, use the correct command to view the TriPhone system (`exp/tri3/final.mdl`) and count the actual number of HMM states. You may find that the actual number of HMM states is much smaller than the theoretical value calculated in Q12, can you explain why ? (Hint: PPT5:page38~page42)
+- Q12 (2 points): According to the number of MonoPhones in the previous question, how many candidates are there for TriPhones and TriPhones' HMM states (suppose each HMM has 3 states) ?
+- Q13 (2 points): Refer to Q10, use the correct command to view the TriPhone system (`exp/tri3/final.mdl`) and count the actual number of HMM states. You may find that the actual number of HMM states is much smaller than the theoretical value calculated in Q12, can you explain why ? (Hint: PPT5:page38~page42)
 
 <details>
 <summary>PROGRESS BAR</summary>
