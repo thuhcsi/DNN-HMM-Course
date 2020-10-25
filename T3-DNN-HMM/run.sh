@@ -38,8 +38,8 @@ fi
 mkdir -p $output_dir
 mkdir -p $output_dir/data
 timit=$KALDI_ROOT/egs/timit/s5
-cdphones_num=`hmm-info $timit/exp/tri3/final.mdl | awk '/pdfs/{print $4}'`
-echo "Total number of context-dependent phones: $cdphones_num"
+clustered_states_num=`hmm-info $timit/exp/tri3/final.mdl | awk '/pdfs/{print $4}'`
+echo "Total number of clustered states: $states_num"
 
 
 if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
@@ -47,18 +47,22 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
   echo "                   Generate Alignments for DNN Training                   "
   echo ============================================================================
 
-  # train set
+  # align train set
   $timit/steps/align_fmllr.sh --nj 30 --cmd "$timit/utils/run.pl --mem 4G" \
                               $timit/data/train $timit/data/lang \
                               $timit/exp/tri3 $timit/exp/tri3_ali_train
 
+  # unzip and merge into one file (ali_train.ark)
   ali-to-pdf $timit/exp/tri3_ali_train/final.mdl \
       ark:"gunzip -c $timit/exp/tri3_ali_train/ali.*.gz|" ark:$output_dir/data/ali_train.ark
 
+  # change format of archive file from `binary` to `utf-8 text`, `ali_train.txt` is readable for human
+  # while `ali_train.ark` is not
   copy-int-vector ark:$output_dir/data/ali_train.ark ark,t:$output_dir/data/ali_train.txt
 
   echo "Done align train set, alignment file: $output_dir/data/ali_train.txt"
 
+  # count the number of occurrences of each state
   analyze-counts --print-args=False --verbose=0 --binary=false --counts-dim=$cdphones_num \
                   ark:$output_dir/data/ali_train.ark $output_dir/data/phone_counts
 
@@ -67,14 +71,16 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
   cp $timit/data/train/text $output_dir/data/text_train/
   cp $timit/data/train/*m $output_dir/data/text_train/
 
-  # dev and test set
+  # align dev and test set
   for x in dev test; do
     $timit/steps/align_fmllr.sh $timit/data/$x $timit/data/lang \
                                 $timit/exp/tri3 $timit/exp/tri3_ali_$x
 
+    # unzip and merge into one file
     ali-to-pdf $timit/exp/tri3_ali_$x/final.mdl \
         ark:"gunzip -c $timit/exp/tri3_ali_$x/ali.*.gz|" ark:$output_dir/data/ali_$x.ark
 
+    # change format of archive file from `binary` to `utf-8 text`
     copy-int-vector ark:$output_dir/data/ali_$x.ark ark,t:$output_dir/data/ali_$x.txt
 
     echo "Done align $x set, alignment file: $output_dir/data/ali_$x.txt"
@@ -103,8 +109,8 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
   # the original MFCC features we created in Task-2(GMM-HMM) is not suitble for DNN training,
   # now we will do some transformation/enhancement on top of the original MFCC features.
   for x in train dev test; do
-    # apply cepstral mean and variance normalization (CMVN) for MFCC
-    # add delta and delta-delta features for MFCC
+    # 1: apply cepstral mean and variance normalization (CMVN) for MFCC
+    # 2: add delta and delta-delta features for MFCC
     apply-cmvn --utt2spk=ark:$timit/data/$x/utt2spk scp:$timit/data/$x/cmvn.scp scp:$timit/data/$x/feats.scp ark:- | add-deltas ark:- ark:$output_dir/data/mfcc_apply_cmvn_$x.ark
     echo "Done apply cepstral mean and variance normalization (CMVN)"
 
@@ -112,7 +118,7 @@ if [ ${stage} -le 1 ] && [ ${stop_stage} -ge 1 ]; then
     splice-feats --left-context=$left_context --right-context=$right_context ark:$output_dir/data/mfcc_apply_cmvn_$x.ark ark,scp:$output_dir/data/mfcc_apply_cmvn_context_$x.ark,$output_dir/data/mfcc_apply_cmvn_context_$x.scp
     echo "Done splice features with $left_context left context and $right_context right context"
 
-    # what we need is actrually mfcc_apply_cmvn_context_*.ark
+    # what we need is actually mfcc_apply_cmvn_context_*.ark
     # delete this file (mfcc_apply_cmvn_*.ark) to save memory
     rm -f $output_dir/data/mfcc_apply_cmvn_$x.ark
   done
