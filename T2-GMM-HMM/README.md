@@ -33,8 +33,6 @@
 	sudo apt-get install python3-pip
 	wget 219.223.184.252/file/ubuntu20.04.kaldi.tar.gz
 	tar xzf ubuntu20.04.kaldi.tar.gz
-	wget 219.223.184.252/file/torch-1.6.0-cp38-cp38-manylinux1_x86_64.whl
-	pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple torch-1.6.0-cp38-cp38-manylinux1_x86_64.whl
 	```
 
 	<details>
@@ -49,10 +47,13 @@
 
 
 
-- macos
+- macos [Working In Progress]
+  - install [homebrew](https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/)
   - start terminal and run the following commands
 	```sh
-	WIP
+	brew install gcc coreutils
+	wget 219.223.184.252/file/macos.kaldi.tar.gz
+	tar xzf macos.kaldi.tar.gz
 	```
 
 
@@ -63,13 +64,11 @@
 	sudo apt-get install python3-pip
 	wget 219.223.184.252/file/ubuntu20.04.kaldi.tar.gz
 	tar xzf ubuntu20.04.kaldi.tar.gz
-	wget 219.223.184.252/file/torch-1.6.0-cp38-cp38-manylinux1_x86_64.whl
-	pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple torch-1.6.0-cp38-cp38-manylinux1_x86_64.whl
 	```
 
 ## GMM-HMM Training
 
-NOTE: by correctly running the baseline script, you can get basic score (10 points) of this task.
+NOTE: by correctly running the baseline script, you can get basic score (16 points) of this task.
 
 First start a terminal and navigate to timit folder
 ```sh
@@ -135,9 +134,8 @@ Answer questions:
 	source ./path.sh
 	copy-feats ark:mfcc/raw_mfcc_test.1.ark ark,t:raw_mfcc_test.1.txt
 	```
-- Q6 (3 points): Whats the difference between MFCC and MEL-Spectrogram, explain why.
-- Q7 (1 point): Look at the directory `data/train`, describe what is contained in file `feats.scp`, docs: [link](http://kaldi-asr.org/doc/io.html#io_sec_scp)
-- Q8 (1 point): Describe the role of script `utils/split_scp.pl` in `steps/make_mfcc.sh:line133`. (Hint: type `wc mfcc/raw_mfcc_train.1.scp` and `wc data/train/feats.scp`, check the value of `feats_nj` in `run.sh` and compare the outputs of the above commands)
+- Q6 (1 point): Look at the directory `data/train`, describe what is contained in file `feats.scp`, docs: [link](http://kaldi-asr.org/doc/io.html#io_sec_scp)
+- Q7 (1 point): Describe the role of script `utils/split_scp.pl` in `steps/make_mfcc.sh:line133`. (Hint: type `wc mfcc/raw_mfcc_train.1.scp` and `wc data/train/feats.scp`, check the value of `feats_nj` in `run.sh` and compare the outputs of the above commands)
 
 <details>
 <summary>PROGRESS BAR</summary>
@@ -166,13 +164,12 @@ Run stage-2: train MonoPhone system:
 
 
 Answer questions:
-- Q9 (1 point): How many MonoPhones do we use ? (Hint: check `exp/mono/phones.txt`, the MonoPhones we mean here do not contain eps, #0 and #1)
-- Q10 (1 point): If we choose 3-state HMM to model all those MonoPhones, how many states will we have ? (Hint: run the following commands and count the number of Triples in `final.mono.mdl.txt`)
+- Q8 (1 point): How many MonoPhones do we use ? (Hint: check `exp/mono/phones.txt`, the MonoPhones we mean here do not contain eps, #0 and #1)
+- Q9 (1 point): If we choose 3-state HMM to model all those MonoPhones, how many states will we have ? (Hint: run the following commands and count the number of Triples in `final.mono.mdl.txt`)
 	```sh
 	source ./path.sh
 	gmm-copy --binary=false exp/mono/final.mdl final.mono.mdl.txt
 	```
-- Q11 (3 points): Explain the meaning of each item in the above triple (i, j, k). docs: [link](https://kaldi-asr.org/doc/hmm.html#transition_model_identifiers)
 
 <details>
 <summary>PROGRESS BAR</summary>
@@ -210,8 +207,8 @@ Run stage-3: train TriPhone system:
 
 
 Answer questions:
-- Q12 (2 points): According to the number of MonoPhones in the previous question, how many candidates are there for TriPhones and TriPhones' HMM states (suppose each HMM has 3 states) ?
-- Q13 (2 points): Refer to Q10, use the correct command to view the TriPhone system (`exp/tri3/final.mdl`) and count the actual number of HMM states. You may find that the actual number of HMM states is much smaller than the theoretical value calculated in Q12, can you explain why ? (Hint: PPT5:page38~page42)
+- Q10 (2 points): According to the number of MonoPhones in the previous question, how many candidates are there for TriPhones and TriPhones' HMM states (suppose each HMM has 3 states) ?
+- Q11 (2 points): Refer to Q9, use the correct command to view the TriPhone system (`exp/tri3/final.mdl`) and count the actual number of HMM states. You may find that the actual number of HMM states is much smaller than the theoretical value calculated in Q10, can you explain why ? (Hint: PPT5:page38~page42)
 
 <details>
 <summary>PROGRESS BAR</summary>
