@@ -25,7 +25,9 @@ pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 
 ## DNN Training
 
-Navigate to DNN-HMM-Course/T3-DNN-HMM:
+NOTE: by correctly running the baseline script, you can get basic score (16 points) of this task.
+
+First navigate to DNN-HMM-Course/T3-DNN-HMM:
 ```sh
 cd ~/kaldi/egs/timit/s5/DNN-HMM-Course/T3-DNN-HMM
 ```
@@ -50,6 +52,9 @@ Run stage-0: generate alignments for dnn training
 ```sh
 ./run.sh --stage 0 --stop-stage 0 --kaldi-root ~/kaldi
 ```
+
+Answer Questions:
+- Q1 (1 point): Explain what is force alignment. docs: [link](http://www.voxforge.org/home/docs/faq/faq/what-is-forced-alignment)
 
 <details>
 <summary>PROGRESS BAR</summary>
@@ -79,6 +84,9 @@ Run stage-1: extract features for dnn training
 ./run.sh --stage 1 --stop-stage 1 --kaldi-root ~/kaldi
 ```
 
+Answer Questions:
+- Q2 (1 point): What is the dimention of transformed MFCC features ?
+
 <details>
 <summary>PROGRESS BAR</summary>
 
@@ -103,6 +111,9 @@ Run stage-2: dnn training and decoding
 ```sh
 ./run.sh --stage 2 --stop-stage 2 --kaldi-root ~/kaldi
 ```
+
+Answer questions:
+- Q3 (2 points): Explain why we need to subtract prior in `train.py:line114-line115`
 
 <details>
 <summary>PROGRESS BAR</summary>
