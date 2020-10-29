@@ -13,7 +13,7 @@ batch_size=64          # batch size
 output_dir=exp          # output directory
 left_context=0          # frame context
 right_context=0         # frame context
-cdphones_num=           # total number of context-dependent phones, automatically set by this script
+clustered_states_num=           # total number of context-dependent phones, automatically set by this script
 feature_dim=            # feature dimention, automatically set by this script
 
 . kaldi_decoding_script/parse_options.sh || exit 1;
@@ -63,7 +63,7 @@ if [ ${stage} -le 0 ] && [ ${stop_stage} -ge 0 ]; then
   echo "Done align train set, alignment file: $output_dir/data/ali_train.txt"
 
   # count the number of occurrences of each state
-  analyze-counts --print-args=False --verbose=0 --binary=false --counts-dim=$cdphones_num \
+  analyze-counts --print-args=False --verbose=0 --binary=false --counts-dim=$clustered_states_num \
                   ark:$output_dir/data/ali_train.ark $output_dir/data/phone_counts
 
   # copy ground truth
@@ -142,7 +142,7 @@ if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
       --lr $lr \
       --batch-size $batch_size \
       --feature-dim $feature_dim \
-      --cdphones-num $cdphones_num \
+      --cdphones-num $clustered_states_num \
       --output-dir $output_dir \
       --prior-file $output_dir/data/phone_counts \
       --align-file $output_dir/data/ali_train.ark \
