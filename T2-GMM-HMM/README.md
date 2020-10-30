@@ -49,11 +49,14 @@
 
 - macos [Working In Progress]
   - install [homebrew](https://mirrors.tuna.tsinghua.edu.cn/help/homebrew/)
+  - install [Xcode](https://apps.apple.com/tw/app/xcode) in App Store
   - start terminal and run the following commands
 	```sh
-	brew install gcc coreutils
+	brew install gcc coreutils wget sox
 	wget 219.223.184.252/file/macos.kaldi.tar.gz
 	tar xzf macos.kaldi.tar.gz
+	sudo mv kaldi /opt/
+	ln -sf /opt/kaldi kaldi
 	```
 
 
