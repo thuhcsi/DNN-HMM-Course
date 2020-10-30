@@ -20,7 +20,7 @@ cd DNN-HMM-Course
 
 Install required packages
 ```sh
-pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt --user
 ```
 
 ## DNN Training
