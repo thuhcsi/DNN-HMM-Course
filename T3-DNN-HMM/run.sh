@@ -20,6 +20,8 @@ feature_dim=            # feature dimention, automatically set by this script
 
 
 # check kaldi
+kaldi_root=`realpath $kaldi_root`
+echo 'kaldi root: ' $kaldi_root
 if [ -d "$kaldi_root/egs/timit/s5/exp/tri3" ]; then
   export KALDI_ROOT=$kaldi_root
   [ -f $KALDI_ROOT/egs/timit/s5/env.sh ] && . $KALDI_ROOT/egs/timit/s5/env.sh
