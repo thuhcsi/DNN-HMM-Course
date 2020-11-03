@@ -1,5 +1,5 @@
 # DNN-HMM-Course
-DNN-HMM related Experiments for THUHCSI Course : \<Speech Signal Processing\>
+DNN-HMM related Experiments for THUHCSI Course : \<Digital Processing of Speech Signals\>
 
 # Task-1 : HMM Viterbi Decoding
 - [ ] Implement forward algorithm in `T1-Viterbi-Decoding/viterbi.py` (13 points)
