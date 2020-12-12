@@ -102,7 +102,7 @@ Run stage-0: format data and prepare lexicon:
 Answer questions:
 - Q1 (3 points): Look at the directory `data/train`, describe what is contained in files `text`, `wav.scp` and `utt2spk` respectively (Hint: all those files can be seen as key-value dicts). Here are some docs you can refer to : [link](http://kaldi-asr.org/doc/data_prep.html#data_prep_data)
 - Q2 (3 points): Look at the file `data/lang/topo`, which contains two kinds of HMM topology, draw them using circles and arrows like [this](http://img.jeepxie.net/upload/c/42/c429ab922d03742c061f94d27c4b1915.png). You may notice that the HMM topology of a special phoneme is different from other phonemes. Use `data/lang/phones.txt` to map and find the name of the special phoneme. Here are some docs you can refer to: [link](http://kaldi-asr.org/doc/data_prep.html#data_prep_lang_contents), [link](http://kaldi-asr.org/doc/hmm.html)
-- Q3 (2 points): You can change `num-sil-states` and `num-nonsil-states` for command `utils/prepare_lang.sh` in `run.sh`, then run this stage again and draw new topologies from `data/lang/topo`. (Note that set them to default values(sil=3 and nonsil=3) and rerun this stage before proceeding to the next stage since other values may affect the performance)
+- Q3 (2 points): You can change `num-sil-states` and `num-nonsil-states` in `run.sh:line59`, then run this stage again and draw new topologies from `data/lang/topo`. (Note that set them to default values(sil=3 and nonsil=3) and rerun this stage before proceeding to the next stage since other values may affect the performance)
 
 <details>
 <summary>PROGRESS BAR</summary>
@@ -211,7 +211,7 @@ Run stage-3: train TriPhone system:
 
 Answer questions:
 - Q10 (2 points): According to the number of MonoPhones in the previous question, how many candidates are there for TriPhones and TriPhones' HMM states (suppose each HMM has 3 states) ?
-- Q11 (2 points): Refer to Q9, use the correct command to view the TriPhone system (`exp/tri3/final.mdl`) and count the actual number of HMM states. You may find that the actual number of HMM states is much smaller than the theoretical value calculated in Q10, can you explain why ? (Hint: PPT5:page38~page42)
+- Q11 (2 points): Refer to Q9, use the correct command to view the TriPhone system (`exp/tri1/final.mdl`) and count the actual number of HMM states. You may find that the actual number of HMM states is much smaller than the theoretical value calculated in Q10, can you explain why ? (Hint: PPT5:page38~page42)
 
 <details>
 <summary>PROGRESS BAR</summary>
